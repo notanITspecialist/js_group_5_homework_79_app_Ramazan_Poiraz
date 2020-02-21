@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const mysqlConnection = require('../mysqlConnect');
 
 const router = express.Router();
@@ -38,17 +37,17 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/:id',async (req, res) => {
-    const data = await mysqlConnection.appealConnection().query(`
+    await mysqlConnection.appealConnection().query(`
     delete from location where id = ` + req.params.id).catch(e => {
         if(e.code === 'ER_ROW_IS_REFERENCED_'+req.params.id){
             res.status(404).send({error: `У елемента с id ${req.params.id} есть связанные с ним таблицы`})
         }
     });
-    res.send({delete: `Element with id ${req.params.id} deleted`})
+    res.send({delete: `Element with id ${req.params.id} deleted`});
 });
 
 router.put('/:id',async (req, res) => {
-    const data = await mysqlConnection.appealConnection().query(`
+    await mysqlConnection.appealConnection().query(`
     update location
     set
     name = ?,
